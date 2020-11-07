@@ -1,0 +1,7 @@
+.idea
+
+venv/
+data/
+
+settings/local_settings.py
+settings/first.json
