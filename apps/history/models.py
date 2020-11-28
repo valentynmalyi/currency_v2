@@ -1,5 +1,4 @@
 import numpy as np
-from datetime import date
 from typing import Iterator
 from django.db import models
 
@@ -12,6 +11,7 @@ class Bar(models.Model):
     close = models.FloatField()
 
     class Meta:
+        ordering = ["time_marker"]
         db_table = "bars"
         unique_together = [("time_marker", "currency")]
         index_together = [("time_marker", "currency")]
@@ -24,6 +24,7 @@ class TimeMarker(models.Model):
     time_marker = models.DateField(db_index=True, unique=True)
 
     class Meta:
+        ordering = ["time_marker"]
         db_table = "time_markers"
 
     def __str__(self):

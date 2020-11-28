@@ -3,6 +3,8 @@ import csv
 import datetime
 
 # noinspection PyUnresolvedReferences
+import scripts.django_init
+
 from apps.history.models import Currency, TimeMarker, Bar
 
 HOME = os.path.join(os.path.join(os.path.dirname(__file__), ".."))

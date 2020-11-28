@@ -1,5 +1,4 @@
 import os
-import importlib
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = False
@@ -74,7 +73,15 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-try:
-    from settings.local_settings import *
-except ImportError:
-    pass
+SECRET_KEY = "lafxdvzevh83o-1y1)#uv+h7ov366!5*1tdzz)3g6j(26031qm"
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'currency',
+        'USER': 'currency_user',
+        'PASSWORD': 'currency_password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}

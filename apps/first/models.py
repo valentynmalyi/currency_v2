@@ -24,34 +24,28 @@ class Strategy(models.Model):
         db_table = "first_strategies"
 
 
-class OrderSetting(models.Model):
-    close_n = models.PositiveSmallIntegerField()
-    forecast = models.FloatField()
+class Result(models.Model):
     is_buy = models.BooleanField()
-    result = models.FloatField(default=None, null=True)
-    current_result = models.FloatField(default=None, null=True)
+    n = models.PositiveSmallIntegerField()
+    forecast = models.FloatField()
+    time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
+    profit = models.FloatField(default=0)
+    status = models.ForeignKey("history.OrderStatus", on_delete=models.CASCADE, default=1)
 
     class Meta:
-        db_table = "first_order_settings"
+        db_table = "first_results"
+        ordering = ["time_marker"]
 
 
 class Order(models.Model):
-    strategy = models.ForeignKey("Strategy", on_delete=models.CASCADE)
     time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
-    order_setting = models.ForeignKey("OrderSetting", on_delete=models.CASCADE, default=None, null=True)
-    is_close = models.BooleanField(default=None, null=True, db_index=True)
+    strategy = models.ForeignKey("Strategy", on_delete=models.CASCADE)
+    result = models.ForeignKey("Result", on_delete=models.CASCADE, default=None, null=True)
 
     class Meta:
         db_table = "first_orders"
         unique_together = [("strategy", "time_marker")]
-        index_together = [("order_setting", "is_close")]
+        ordering = ["time_marker"]
 
-
-class Result(models.Model):
-    close_n = models.ForeignKey("Order", on_delete=models.CASCADE)
-    time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
-    result = models.FloatField()
-    status = models.ForeignKey("history.OrderStatus", on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "first_results"
+    def __str__(self):
+        return f"ORDER({self.time_marker.time_marker})"
