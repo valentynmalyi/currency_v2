@@ -48,4 +48,4 @@ class Order(models.Model):
         ordering = ["time_marker"]
 
     def __str__(self):
-        return f"ORDER({self.time_marker.time_marker})"
+        return f"{self.time_marker}"

@@ -1,7 +1,9 @@
 import os
+from environ import Env
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEBUG = False
+BASE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..")
+env = Env()
+DEBUG = env.str("DJANGO_DEBUG")
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -73,15 +75,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-SECRET_KEY = "lafxdvzevh83o-1y1)#uv+h7ov366!5*1tdzz)3g6j(26031qm"
+SECRET_KEY = env.str("DJANGO_SECRET_KEY")
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'currency',
-        'USER': 'currency_user',
-        'PASSWORD': 'currency_password',
-        'HOST': '127.0.0.1',
+        'NAME': env.str("DJANGO_DB_NAME"),
+        'USER': env.str("DJANGO_DB_USER"),
+        'PASSWORD': env.str("DJANGO_DB_PASS"),
+        'HOST': env.str("DJANGO_DB_HOST"),
         'PORT': '5432',
     }
 }
