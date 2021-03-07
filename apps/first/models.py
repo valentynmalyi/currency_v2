@@ -25,6 +25,7 @@ class Strategy(models.Model):
 
 
 class Result(models.Model):
+    order = models.OneToOneField("Order", on_delete=models.CASCADE)
     is_buy = models.BooleanField()
     n = models.PositiveSmallIntegerField()
     forecast = models.FloatField()
@@ -40,7 +41,6 @@ class Result(models.Model):
 class Order(models.Model):
     time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
     strategy = models.ForeignKey("Strategy", on_delete=models.CASCADE)
-    result = models.ForeignKey("Result", on_delete=models.CASCADE, default=None, null=True)
 
     class Meta:
         db_table = "first_orders"

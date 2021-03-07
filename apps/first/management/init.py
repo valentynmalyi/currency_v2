@@ -25,11 +25,26 @@ def init_strategy() -> None:
     eur = Currency.objects.get(first="eur", second="usd")
     gbp = Currency.objects.get(first="gbp", second="usd")
     jpy = Currency.objects.get(first="usd", second="jpy")
+    cad = Currency.objects.get(first="usd", second="cad")
+    aud = Currency.objects.get(first="aud", second="usd")
+    nzd = Currency.objects.get(first="nzd", second="usd")
     setting = models.Setting.objects.get(name="classic")
 
     models.Strategy.objects.update_or_create(currency=eur, setting=setting)
     models.Strategy.objects.update_or_create(currency=gbp, setting=setting)
     models.Strategy.objects.update_or_create(currency=jpy, setting=setting)
+    models.Strategy.objects.update_or_create(currency=cad, setting=setting)
+    models.Strategy.objects.update_or_create(currency=aud, setting=setting)
+    models.Strategy.objects.update_or_create(currency=nzd, setting=setting)
+
+    setting = models.Setting.objects.get(name="c95")
+
+    models.Strategy.objects.update_or_create(currency=eur, setting=setting)
+    models.Strategy.objects.update_or_create(currency=gbp, setting=setting)
+    models.Strategy.objects.update_or_create(currency=jpy, setting=setting)
+    models.Strategy.objects.update_or_create(currency=cad, setting=setting)
+    models.Strategy.objects.update_or_create(currency=aud, setting=setting)
+    models.Strategy.objects.update_or_create(currency=nzd, setting=setting)
 
 
 def init_orders() -> None:
