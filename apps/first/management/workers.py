@@ -8,9 +8,9 @@ from currency.utils import get_working_bars
 
 
 def worker_order():
-    setting = models.Setting.objects.get(name="c95")
-    for currency in history_models.Currency.objects.all():
-        strategy = models.Strategy.objects.get(currency=currency, setting=setting)
+    setting = models.Setting.objects.get(name="c90")
+    for strategy in models.Strategy.objects.filter(setting=setting):
+        currency = strategy.currency
         data_time = settings.START_DATE
         query_set = history_models.TimeMarker.objects.filter(time_marker__gte=data_time)
         query_set = query_set.exclude(time_marker__in=models.Order.objects.filter(strategy=strategy).values("time_marker__time_marker"))
@@ -24,11 +24,21 @@ def worker_order():
             mean = -mean
             good_days = np.where(np.logical_and(abs(mean) > setting.mean, sd > setting.sd))[0]
             order = models.Order.objects.update_or_create(time_marker=time_marker, strategy=strategy)[0]
-            if len(similars) >= setting.min_similar and good_days.size:
+            history = len(similars)
+            if  history >= setting.min_similar and good_days.size:
                 n = good_days[-1]
                 forecast = abs(mean[n])
                 is_buy = mean[n] > 0
-                defaults = {"n": n, "forecast": forecast, "is_buy": is_buy, "status_id": 1, "time_marker": time_marker}
+                defaults = {
+                    "n": n,
+                    "forecast": forecast,
+                    "is_buy": is_buy,
+                    "status_id": 1,
+                    "time_marker": time_marker,
+                    "history": history,
+                    "mean": mean[n],
+                    "sd": sd[n]
+                }
                 models.Result.objects.update_or_create(order=order, defaults=defaults)
 
 
