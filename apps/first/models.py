@@ -9,8 +9,11 @@ class Setting(models.Model):
     min_similar = models.PositiveSmallIntegerField()
     stop = models.FloatField()
     take = models.FloatField()
-    mean = models.FloatField()
-    sd = models.FloatField()
+    mean_min = models.FloatField()
+    sd_min = models.FloatField()
+    mean_max = models.FloatField()
+    sd_max = models.FloatField()
+    n_min = models.PositiveSmallIntegerField()
 
     class Meta:
         db_table = "first_settings"
@@ -33,7 +36,6 @@ class Result(models.Model):
     profit = models.FloatField(default=0)
     status = models.ForeignKey("history.OrderStatus", on_delete=models.CASCADE, default=1)
     history = models.IntegerField()
-    mean = models.FloatField()
     sd = models.FloatField()
 
     class Meta:
