@@ -56,7 +56,9 @@ def get_mean_and_sd(list_similar: List[Similar]):
     """get mean and sd from similar list"""
     list_profits = []
     for similar in list_similar:
-        list_profits.append(similar.profit())
+        profit = similar.profit()
+        if profit.size == similar.n:
+            list_profits.append(similar.profit())
     if len(list_profits) > 2:
         mean = np.mean(list_profits, axis=0)
         sd = np.std(list_profits, axis=0)

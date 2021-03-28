@@ -12,21 +12,21 @@ def init_settings() -> None:
         "min_similar": 20,
         "stop": 10,
         "take": 10,
-        "mean": 0.8,
-        "sd": 0.4
+        "mean_min": 0.8,
+        "sd_min": 0.4
     }
-    models.Setting.objects.update_or_create(name="classic", defaults=defaults)
+    models.Setting.objects.update_or_create(name="c85", defaults=defaults)
     defaults = {
-        "abs_correlation": 0.99,
+        "abs_correlation": 0.95,
         "n": 50,
         "history_size": 2500,
         "min_similar": 20,
         "stop": 10,
         "take": 10,
-        "mean": 0.8,
-        "sd": 0.4
+        "mean_min": 0.8,
+        "sd_min": 0.4
     }
-    models.Setting.objects.update_or_create(name="c99", defaults=defaults)
+    models.Setting.objects.update_or_create(name="c95", defaults=defaults)
     defaults = {
         "abs_correlation": 0.9,
         "n": 50,
@@ -34,8 +34,8 @@ def init_settings() -> None:
         "min_similar": 20,
         "stop": 10,
         "take": 10,
-        "mean": 0.8,
-        "sd": 0.4
+        "mean_min": 0.8,
+        "sd_min": 0.4
     }
     models.Setting.objects.update_or_create(name="c90", defaults=defaults)
 
@@ -50,7 +50,7 @@ def init_strategy() -> None:
     cad = Currency.objects.get(first="usd", second="cad")
     aud = Currency.objects.get(first="aud", second="usd")
     nzd = Currency.objects.get(first="nzd", second="usd")
-    setting = models.Setting.objects.get(name="classic")
+    setting = models.Setting.objects.get(name="c85")
 
     models.Strategy.objects.update_or_create(currency=eur, setting=setting)
     models.Strategy.objects.update_or_create(currency=gbp, setting=setting)
