@@ -35,7 +35,6 @@ class Result(models.Model):
     time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
     profit = models.FloatField(default=0)
     status = models.ForeignKey("history.OrderStatus", on_delete=models.CASCADE, default=1)
-    history = models.IntegerField()
     sd = models.FloatField()
 
     class Meta:
@@ -46,6 +45,7 @@ class Result(models.Model):
 class Order(models.Model):
     time_marker = models.ForeignKey("history.TimeMarker", on_delete=models.CASCADE)
     strategy = models.ForeignKey("Strategy", on_delete=models.CASCADE)
+    history = models.IntegerField()
 
     class Meta:
         db_table = "first_orders"

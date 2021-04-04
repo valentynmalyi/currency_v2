@@ -22,25 +22,26 @@ def worker_order():
                 root_bar=root_bar, n=setting.n, history_size=setting.history_size, abs_correlation=setting.abs_correlation))
             mean, sd = get_mean_and_sd(list_similar=similars)
             mean = -mean
-            logical = np.logical_and(setting.mean_min < abs(mean) < setting.mean_min, setting.sd_min < sd < setting.sd_max )
+            abs_mean = abs(mean)
+            logical = (setting.mean_min < abs_mean) & (abs_mean < setting.mean_min) & (setting.sd_min < sd) & (sd < setting.sd_max)
             good_days = np.where(logical)[0]
-            order = models.Order.objects.update_or_create(time_marker=time_marker, strategy=strategy)[0]
             history = len(similars)
+            defaults = {
+                "history": history
+            }
+            order = models.Order.objects.update_or_create(time_marker=time_marker, strategy=strategy, defaults=defaults)[0]
             if history < setting.min_similar or not good_days.size:
                 continue
             n = good_days[-1]
             # n = np.argmax(good_days)
             if n < setting.n_min:
                 continue
-            forecast = abs(mean[n])
-            is_buy = mean[n] > 0
             defaults = {
                 "n": n,
-                "forecast": forecast,
-                "is_buy": is_buy,
+                "forecast": abs_mean[n],
+                "is_buy": mean[n] > 0,
                 "status_id": 1,
                 "time_marker": time_marker,
-                "history": history,
                 "sd": sd[n]
             }
             models.Result.objects.update_or_create(order=order, defaults=defaults)
