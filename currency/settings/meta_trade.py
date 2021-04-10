@@ -1,0 +1,3 @@
+LOGIN = 5364362
+PASSWORD = "3hdSahJP"
+SERVER = "FxPro-MT5"
