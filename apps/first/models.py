@@ -7,7 +7,6 @@ class Setting(models.Model):
     n = models.PositiveSmallIntegerField()
     history_size = models.PositiveSmallIntegerField()
     min_similar = models.PositiveSmallIntegerField()
-    stop = models.FloatField()
     take = models.FloatField()
     mean_min = models.FloatField()
     sd_min = models.FloatField()

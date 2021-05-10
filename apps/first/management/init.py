@@ -6,36 +6,30 @@ from apps.history.management import init as history_init
 
 def init_settings() -> None:
     defaults = {
-        "abs_correlation": 0.85,
-        "n": 50,
-        "history_size": 2500,
-        "min_similar": 20,
-        "stop": 10,
-        "take": 10,
-        "mean_min": 0.8,
-        "sd_min": 0.4
-    }
-    models.Setting.objects.update_or_create(name="c85", defaults=defaults)
-    defaults = {
         "abs_correlation": 0.95,
         "n": 50,
         "history_size": 2500,
         "min_similar": 20,
-        "stop": 10,
         "take": 10,
-        "mean_min": 0.8,
-        "sd_min": 0.4
+        "mean_min": 0.25,
+        "sd_min": 0.22,
+        "mean_max": 2.2,
+        "sd_max":  4,
+        "n_min": 1,
     }
     models.Setting.objects.update_or_create(name="c95", defaults=defaults)
+
     defaults = {
         "abs_correlation": 0.9,
         "n": 50,
         "history_size": 2500,
         "min_similar": 20,
-        "stop": 10,
         "take": 10,
-        "mean_min": 0.8,
-        "sd_min": 0.4
+        "mean_min": 1.4,
+        "sd_min": 0.4,
+        "mean_max": 2.2,
+        "sd_max":  0.6,
+        "n_min": 1,
     }
     models.Setting.objects.update_or_create(name="c90", defaults=defaults)
 
@@ -50,14 +44,6 @@ def init_strategy() -> None:
     cad = Currency.objects.get(first="usd", second="cad")
     aud = Currency.objects.get(first="aud", second="usd")
     nzd = Currency.objects.get(first="nzd", second="usd")
-    setting = models.Setting.objects.get(name="c85")
-
-    models.Strategy.objects.update_or_create(currency=eur, setting=setting)
-    models.Strategy.objects.update_or_create(currency=gbp, setting=setting)
-    models.Strategy.objects.update_or_create(currency=jpy, setting=setting)
-    models.Strategy.objects.update_or_create(currency=cad, setting=setting)
-    models.Strategy.objects.update_or_create(currency=aud, setting=setting)
-    models.Strategy.objects.update_or_create(currency=nzd, setting=setting)
 
     setting = models.Setting.objects.get(name="c90")
 
@@ -68,7 +54,7 @@ def init_strategy() -> None:
     models.Strategy.objects.update_or_create(currency=aud, setting=setting)
     models.Strategy.objects.update_or_create(currency=nzd, setting=setting)
 
-    setting = models.Setting.objects.get(name="c99")
+    setting = models.Setting.objects.get(name="c95")
 
     models.Strategy.objects.update_or_create(currency=eur, setting=setting)
     models.Strategy.objects.update_or_create(currency=gbp, setting=setting)

@@ -23,7 +23,7 @@ def worker_order():
             mean, sd = get_mean_and_sd(list_similar=similars)
             mean = -mean
             abs_mean = abs(mean)
-            logical = (setting.mean_min < abs_mean) & (abs_mean < setting.mean_min) & (setting.sd_min < sd) & (sd < setting.sd_max)
+            logical = (setting.mean_min < abs_mean) & (abs_mean < setting.mean_max) & (setting.sd_min < sd) & (sd < setting.sd_max)
             good_days = np.where(logical)[0]
             history = len(similars)
             defaults = {
@@ -33,7 +33,6 @@ def worker_order():
             if history < setting.min_similar or not good_days.size:
                 continue
             n = good_days[-1]
-            # n = np.argmax(good_days)
             if n < setting.n_min:
                 continue
             defaults = {
@@ -56,18 +55,18 @@ def worker_result():
         print(currency, result.time_marker)
         atr = currency.atr(time_marker=order.time_marker)
         start_bar = next(currency.left(time_marker=order.time_marker, n=1))
-        take = start_bar.close + setting.take * atr
-        stop = start_bar.close - setting.stop * atr
+        price_up = start_bar.close + setting.take * atr
+        price_down = start_bar.close - setting.take * atr
         for bar in history_models.Bar.objects.filter(time_marker__time_marker__gt=result.time_marker.time_marker, currency=currency):
             result.time_marker = bar.time_marker
             if result.is_buy:
                 result.profit = round((bar.close - start_bar.close) / atr, 2)
-                if bar.low < stop:
-                    result.profit = round((stop - start_bar.close) / atr, 2)
+                if bar.low < price_down:
+                    result.profit = round((price_down - start_bar.close) / atr, 2)
                     result.status_id = 2
                     break
-                if bar.high > take:
-                    result.profit = round((take - start_bar.close) / atr, 2)
+                if bar.high > price_up:
+                    result.profit = round((price_up - start_bar.close) / atr, 2)
                     result.status_id = 3
                     break
                 if get_working_bars(start_bar.time_marker.time_marker, bar.time_marker.time_marker) >= order.result.n - 1:
@@ -75,12 +74,12 @@ def worker_result():
                     break
             else:
                 result.profit = round(-(bar.close - start_bar.close) / atr, 2)
-                if bar.low < stop:
-                    result.profit = round(-(stop - start_bar.close) / atr, 2)
+                if bar.low < price_down:
+                    result.profit = round(-(price_down - start_bar.close) / atr, 2)
                     result.status_id = 2
                     break
-                if bar.high > take:
-                    result.profit = round(-(take - start_bar.close) / atr, 2)
+                if bar.high > price_up:
+                    result.profit = round(-(price_up - start_bar.close) / atr, 2)
                     result.status_id = 3
                     break
                 if get_working_bars(start_bar.time_marker.time_marker, bar.time_marker.time_marker) >= order.result.n - 1:

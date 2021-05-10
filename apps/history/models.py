@@ -75,6 +75,13 @@ class Currency(models.Model):
             array.append(bar.close)
         return np.array(array)
 
+    def get_start_bar(self, time_marker: TimeMarker):
+        return next(self.left(time_marker=time_marker, n=1))
+
+    @property
+    def symbol(self) -> str:
+        return f"{self.first}{self.second}".upper()
+
 
 class OrderStatus(models.Model):
     name = models.CharField(max_length=50, blank=False, db_index=True, unique=True)
