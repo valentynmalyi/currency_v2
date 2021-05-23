@@ -1,5 +1,6 @@
 from django.db import models
 
+from apps.history import models as history_models
 
 class Setting(models.Model):
     name = models.CharField(max_length=50, blank=False, db_index=True, unique=True)
@@ -35,10 +36,17 @@ class Result(models.Model):
     profit = models.FloatField(default=0)
     status = models.ForeignKey("history.OrderStatus", on_delete=models.CASCADE, default=1)
     sd = models.FloatField()
+    atr = models.FloatField(default=None, null=True)
+    volume = models.FloatField(default=None, null=True)
+    sl = models.FloatField(default=None, null=True)
+    tp = models.FloatField(default=None, null=True)
 
     class Meta:
         db_table = "first_results"
         ordering = ["time_marker"]
+
+    def is_open(self):
+        return self.status == 1
 
 
 class Order(models.Model):

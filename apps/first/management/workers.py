@@ -35,13 +35,24 @@ def worker_order():
             n = good_days[-1]
             if n < setting.n_min:
                 continue
+            atr = currency.atr(time_marker=order.time_marker)
+            start_bar = currency.get_start_bar(time_marker=order.time_marker)
+            is_buy = mean[n] > 0
+            sl = start_bar.close - order.strategy.setting.take * atr
+            tp = start_bar.close + order.strategy.setting.take * atr
+            if not is_buy:
+                tp, sl = sl, tp
             defaults = {
                 "n": n,
                 "forecast": abs_mean[n],
-                "is_buy": mean[n] > 0,
+                "is_buy": is_buy,
                 "status_id": 1,
                 "time_marker": time_marker,
-                "sd": sd[n]
+                "sd": sd[n],
+                "atr": atr,
+                "volume": settings.METATRADE.FIRST_VOLUME * start_bar.close / atr,
+                "sl": sl,
+                "tp": tp
             }
             models.Result.objects.update_or_create(order=order, defaults=defaults)
 
