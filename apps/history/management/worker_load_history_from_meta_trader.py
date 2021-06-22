@@ -20,7 +20,7 @@ def main():
         log.debug({"currency": name})
         latest = models.Bar.objects.filter(currency=currency).latest("time_marker__time_marker")
         latest_datetime = datetime.combine(latest.time_marker.time_marker, datetime.min.time())
-        date_to = datetime.utcnow() - timedelta(days=1)
+        date_to = datetime.utcnow()
         items = Mt5.copy_rates_range(name, Mt5.TIMEFRAME_D1, latest_datetime, date_to)
         if items is None:
             continue
