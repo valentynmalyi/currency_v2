@@ -19,4 +19,3 @@ def main():
         if result.is_open():
             deal.close_first()
     log.debug("end")
-
