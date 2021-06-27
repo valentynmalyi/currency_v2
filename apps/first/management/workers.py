@@ -79,6 +79,7 @@ def worker_order():
 
 
 def worker_result():
+    log_worker_result.debug("start")
     for result in models.Result.objects.filter(status_id=1):
         order = result.order
         strategy = order.strategy

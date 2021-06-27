@@ -1,6 +1,6 @@
 import logging
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import MetaTrader5 as Mt5
 
@@ -30,6 +30,8 @@ def main():
             low = item["low"]
             t = datetime.utcfromtimestamp(item["time"]).date()
             if t.weekday() in {6, 5}:
+                continue
+            if t > date_to.date():
                 continue
             time_marker = TimeMarker.objects.get_or_create(time_marker=t)[0]
             log.debug({"time_marker": time_marker})
