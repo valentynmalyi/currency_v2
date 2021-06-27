@@ -13,7 +13,7 @@ log_worker_result = logging.getLogger("worker_result")
 
 
 def worker_order():
-    setting = models.Setting.objects.get(name="c95")
+    setting = models.Setting.objects.get(name="c90")
     for strategy in models.Strategy.objects.filter(setting=setting):
         currency = strategy.currency
         data_time = settings.START_DATE
