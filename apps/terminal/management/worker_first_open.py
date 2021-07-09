@@ -16,7 +16,7 @@ def main():
     log.debug("start")
     for result in first_models.Result.objects.filter(status__id=1):  # type: first_models.Result
         log.debug({"result": result})
-        if models.Deal.objects.filter(result=result).exist():
+        if models.Deal.objects.filter(first=result).exist():
             log.debug("")
             continue
         order = result.order
